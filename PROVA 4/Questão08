@@ -1,0 +1,27 @@
+//Questão 8
+
+#include <stdio.h>
+#include <math.h>
+
+int main()
+{
+    int A, B, C;
+    
+// Loop continua até que a seja 0
+
+    while (scanf("%d", &A) != EOF)
+    {
+        if (A == 0)
+        {
+            break;
+        }
+// Lê os valores de B e C
+
+        scanf("%d %d", &B, &C);
+// Exibe a àrea calculada        
+        printf("%.0lf\n", floor(sqrt(A * B * 100.0 / C)));
+    }
+
+    return 0;
+}
+
