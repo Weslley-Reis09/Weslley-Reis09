@@ -88,7 +88,7 @@ int main() {
 // Exibe a pontuação de cada jogador
 
     
-    printf("\nPontuaÃ§Ã£o:\n");
+    printf("\nPontuação:\n");
     printf("Jogador 1: %d pontos\n", pontos1);
     printf("Jogador 2: %d pontos\n", pontos2);
     
