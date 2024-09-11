@@ -1,0 +1,133 @@
+//Sistema de controle de clube social
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_STRING_LENGTH 100
+#define MAX_DEPENDENTES 10
+#define MAX_CATEGORIAS 5
+#define MAX_MENSALIDADES 12
+
+typedef struct {
+    char nome[MAX_STRING_LENGTH];
+} Categoria;
+
+typedef struct {
+    char numeroCartao[MAX_STRING_LENGTH];
+    char nome[MAX_STRING_LENGTH];
+    char parentesco[MAX_STRING_LENGTH];
+    char email[MAX_STRING_LENGTH];
+} Dependente;
+
+typedef struct {
+    char dataPagamento[MAX_STRING_LENGTH];
+    float valor;
+    char dataPagamentoEfetiva[MAX_STRING_LENGTH];
+    float jurosAplicados;
+    float valorPagoEfetivo;
+    int status; // 0 para não quitada, 1 para quitada
+} Mensalidade;
+
+typedef struct {
+    char numeroCartao[MAX_STRING_LENGTH];
+    char nome[MAX_STRING_LENGTH];
+    char endereco[MAX_STRING_LENGTH];
+    char telefone[MAX_STRING_LENGTH];
+    char email[MAX_STRING_LENGTH];
+    Categoria categoria;
+    Dependente dependentes[MAX_DEPENDENTES];
+    int numDependentes;
+    Mensalidade mensalidades[MAX_MENSALIDADES];
+    int numMensalidades;
+} Socio;
+
+// Função para inicializar um sócio
+Socio inicializarSocio(const char *numeroCartao, const char *nome, const char *endereco, const char *telefone,
+const char *email, Categoria categoria) {
+    Socio socio;
+    strncpy(socio.numeroCartao, numeroCartao, MAX_STRING_LENGTH - 1);
+    socio.numeroCartao[MAX_STRING_LENGTH - 1] = '\0';
+    strncpy(socio.nome, nome, MAX_STRING_LENGTH - 1);
+    socio.nome[MAX_STRING_LENGTH - 1] = '\0';
+    strncpy(socio.endereco, endereco, MAX_STRING_LENGTH - 1);
+    socio.endereco[MAX_STRING_LENGTH - 1] = '\0';
+    strncpy(socio.telefone, telefone, MAX_STRING_LENGTH - 1);
+    socio.telefone[MAX_STRING_LENGTH - 1] = '\0';
+    strncpy(socio.email, email, MAX_STRING_LENGTH - 1);
+    socio.email[MAX_STRING_LENGTH - 1] = '\0';
+    socio.categoria = categoria;
+    socio.numDependentes = 0;
+    socio.numMensalidades = 0;
+    return socio;
+}
+
+// Função para adicionar um dependente a um sócio
+Socio adicionarDependente(Socio socio, Dependente dependente) {
+    if (socio.numDependentes < MAX_DEPENDENTES) {
+        socio.dependentes[socio.numDependentes++] = dependente;
+    } else {
+        printf("Número máximo de dependentes atingido.\n");
+    }
+    return socio;
+}
+
+// Função para adicionar uma mensalidade a um sócio
+Socio adicionarMensalidade(Socio socio, Mensalidade mensalidade) {
+    if (socio.numMensalidades < MAX_MENSALIDADES) {
+        socio.mensalidades[socio.numMensalidades++] = mensalidade;
+    } else {
+        printf("Número máximo de mensalidades atingido.\n");
+    }
+    return socio;
+}
+
+// Função para imprimir informações de um sócio
+void imprimirSocio(Socio socio) {
+    printf("Número do Cartão: %s\n", socio.numeroCartao);
+    printf("Nome: %s\n", socio.nome);
+    printf("Endereço: %s\n", socio.endereco);
+    printf("Telefone: %s\n", socio.telefone);
+    printf("Email: %s\n", socio.email);
+    printf("Categoria: %s\n", socio.categoria.nome);
+    
+    printf("Dependentes:\n");
+    for (int i = 0; i < socio.numDependentes; i++) {
+        printf("  Número do Cartão: %s\n", socio.dependentes[i].numeroCartao);
+        printf("  Nome: %s\n", socio.dependentes[i].nome);
+        printf("  Parentesco: %s\n", socio.dependentes[i].parentesco);
+        printf("  Email: %s\n", socio.dependentes[i].email);
+    }
+    
+    printf("Mensalidades:\n");
+    for (int i = 0; i < socio.numMensalidades; i++) {
+        printf("  Data de Pagamento: %s\n", socio.mensalidades[i].dataPagamento);
+        printf("  Valor: %.2f\n", socio.mensalidades[i].valor);
+        printf("  Data de Pagamento Efetiva: %s\n", socio.mensalidades[i].dataPagamentoEfetiva);
+        printf("  Juros Aplicados: %.2f\n", socio.mensalidades[i].jurosAplicados);
+        printf("  Valor Pago Efetivo: %.2f\n", socio.mensalidades[i].valorPagoEfetivo);
+        printf("  Status: %s\n", socio.mensalidades[i].status ? "Quitada" : "Não Quitada");
+    }
+}
+
+int main() {
+    Categoria categoria = {"Exemplos"};
+    
+    Socio socio = inicializarSocio("00001", "Weslley Reis", "Rua A. Jobim 184", "(89) 99411-2222", "weslleyr@gmail.com", categoria);
+    
+    Dependente dep1 = {"D0001", "Fulana Reis", "Filha", "fulanar@gmail.com"};
+    Dependente dep2 = {"D0002", "Ciclano Reis", "Filho", "ciclanor@gmail.com"};
+    
+    socio = adicionarDependente(socio, dep1);
+    socio = adicionarDependente(socio, dep2);
+    
+    Mensalidade mensalidade1 = {"2024/09/10", 100.0, "2024/09/10", 0.0, 100.0, 1};
+    Mensalidade mensalidade2 = {"2024/09/10", 100.0, "-----", 0.0, 0.0, 0};
+    
+    socio = adicionarMensalidade(socio, mensalidade1);
+    socio = adicionarMensalidade(socio, mensalidade2);
+    
+    imprimirSocio(socio);
+    
+    return 0;
+}
